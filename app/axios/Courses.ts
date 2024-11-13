@@ -5,7 +5,10 @@ export interface ICourse {
   title: string;
   code: string;
   description: string;
-  instructor: string;
+  instructor: {
+    id: string;
+    name: string;
+  };
   courseImage: string;
   coursePrice: number;
   slug: string;
@@ -181,7 +184,7 @@ export const getCoursesByCreatorId = async (
   id: string
 ): Promise<ApiResponse> => {
   try {
-    const response = await api.get(`/courses/creator/${id}`);
+    const response = await api.get(`/course/creator/${id}`);
     if (response.status === 200) {
       const userCourses = response.data.data as ICourse[];
       return {

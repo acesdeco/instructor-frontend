@@ -36,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const response = await createCourse(courseData);
   if (response.success && "data" in response) {
     console.log("him", response);
-    return redirect(`/course/${(response?.data as ICourse)?.slug}`);
+    return redirect(`/course/${(response?.data as ICourse)?.slug}/edit`);
   }
   if (!response.success) {
     console.log("him", response);
