@@ -33,9 +33,14 @@ export default function Enrolled() {
         {(!courses || courses.length === 0) && (
           <div className=" col-span-2 text-center flex flex-col items-center">
             <img alt="Courses not found" src="/public/notfound.png"></img>
-            <p className="text-gray-900 text-xl font-medium">Your classroom awaits.</p>
-            <span className="text-gray-800 mb-2">Create your first course and start inspiring minds. Tap Create Course to Begin</span>
-            <Link to={`/dashboard/courses`} className="w-fit">
+            <p className="text-gray-900 text-xl font-medium">
+              Your classroom awaits.
+            </p>
+            <span className="text-gray-800 mb-2">
+              Create your first course and start inspiring minds. Tap Create
+              Course to Begin
+            </span>
+            <Link to={`/dashboard/create-course`} className="w-fit">
               <Button>Create Course</Button>
             </Link>
           </div>
