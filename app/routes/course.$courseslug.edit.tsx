@@ -104,7 +104,7 @@ export default function CourseEdit() {
               <span>Video</span>
             </div>
             <div >
-                {/* <Editor value={value} setValue={()=>setValue} /> */}
+                <Editor value={value} setValue={()=>setValue} />
             </div>
           </div>
         </div>
