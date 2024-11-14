@@ -73,7 +73,11 @@ export default function Dashboard() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="cursor-pointer md:hidden"
             >
-                {isMenuOpen ? <IoIosClose size={30} color="#1671d9" /> : <BiMenuAltRight size={30} color="#1671d9" />}
+              {isMenuOpen ? (
+                <IoIosClose size={30} color="#1671d9" />
+              ) : (
+                <BiMenuAltRight size={30} color="#1671d9" />
+              )}
             </button>
           </div>
         </div>
@@ -81,7 +85,7 @@ export default function Dashboard() {
       <hr />
       <section className="h-[85%] bg-transparent w-6/6 px-4 md:px-10 gap-2 mt-4 md:mt-10 flex flex-col md:flex-row justify-between items-start relative w-[100%] ">
         <aside
-          className={`absolute md:static bg-white px-3 z-50 pt-10 h-full duration-500 w-[300px] ${
+          className={`absolute md:static bg-white px-3 z-10 pt-10 h-full duration-500 w-[300px] ${
             isMenuOpen
               ? "left-0 w-[270px]"
               : "-left-[120%] md:left-0 md:w-[270px] text-wrap"
@@ -90,10 +94,10 @@ export default function Dashboard() {
           <ul className="w-[100%]">
             {locations.map((location, y) => (
               <li className="w-full" key={y}>
-          <NavLinkTs
-            location={location.location}
-            item={location.item}
-          ></NavLinkTs>
+                <NavLinkTs
+                  location={location.location}
+                  item={location.item}
+                ></NavLinkTs>
               </li>
             ))}
           </ul>
@@ -106,9 +110,16 @@ export default function Dashboard() {
         >
           <Outlet></Outlet>
         </main>
-        <button onClick={() => setIsBottomUp(!isBottomUp)} className="md:hidden bottom-32 right-10 absolute z-50 p-4 rounded-full bg-blue-500">
-           { isBottomUp ? <IoIosArrowDown size={20} color="#ffffff"/> : <IoIosArrowUp size={20} color="#ffffff" /> }
-          </button>
+        <button
+          onClick={() => setIsBottomUp(!isBottomUp)}
+          className="md:hidden bottom-32 right-10 absolute z-50 p-4 rounded-full bg-blue-500"
+        >
+          {isBottomUp ? (
+            <IoIosArrowDown size={20} color="#ffffff" />
+          ) : (
+            <IoIosArrowUp size={20} color="#ffffff" />
+          )}
+        </button>
         {/* <aside
           className={`absolute md:static bg-gray-600 px-3 z-40 pt-10 h-fit duration-500 w-full md:w-1/6  ${
             isBottomUp
