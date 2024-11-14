@@ -9,16 +9,15 @@ type QuillEditorProps = {
 const QuillEditor = ({ value, onChange }: QuillEditorProps) => {
   const quillRef = useRef<HTMLDivElement>(null);
   const [quillEditor, setQuillEditor] = useState<any>(null); // Store Quill instance in state
-console.log(quillEditor)
+
   useEffect(() => {
     // Only load Quill in the browser (window is available only in the browser)
     if (typeof window !== "undefined" && !quillEditor) {
       import("quill").then((module) => {
         const Quill = module.default || module; // Get the correct Quill reference
-        console.log("hey")
+
         // Initialize Quill editor
         if (quillRef.current) {
-          console.log(quillRef.current)
           const editor = new Quill(quillRef.current, {
             theme: "snow",
             modules: {
@@ -36,7 +35,6 @@ console.log(quillEditor)
             },
           });
 
-        
           // Set Quill instance in the state
           setQuillEditor(editor);
 
@@ -59,14 +57,10 @@ console.log(quillEditor)
     return () => {
       if (quillEditor) {
         quillEditor.off("text-change");
-      setQuillEditor(null)
+        setQuillEditor(null);
       }
     };
-  }, []); // Only run effect when `value` or `onChange` changes
-
-  // if (!quillEditor) {
-  //   return <div>Loading editor...</div>; // Show loading state while Quill is loading
-  // }
+  }, [quillEditor, value, onChange]); // Only run effect when `quillEditor`, `value`, or `onChange` changes
 
   return <div ref={quillRef} style={{ minHeight: "200px" }} />;
 };

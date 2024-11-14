@@ -94,7 +94,7 @@ export default function CourseEdit() {
               </div>
             </div>
           </div>
-          <div className="right p-6 gap-5 w-full  flex flex-col text-black">
+          <div className="right px-6 pt-6 gap-5 w-full overflow-auto  flex flex-col text-black">
             <div className="flex text-lg font-medium gap-3">
               <button
                 className={`cursor-pointer ${
