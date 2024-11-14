@@ -71,6 +71,8 @@ export default function AssessmentComponent({
 
     if (assessmentId) {
       fetchAssessmentData();
+    }else {
+        setDataLoading(false);
     }
   }, [assessmentId]);
   const [dataLoading, setDataLoading] = useState(true);

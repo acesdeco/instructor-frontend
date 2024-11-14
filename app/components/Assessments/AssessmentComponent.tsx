@@ -83,11 +83,15 @@ AssessmentComponentProps) => {
                   </button>
                 </li>
               ))}
+              
+                <button className="bg-blue-600 mt-2 p-2 w-fit text-white rounded-md" onClick={() => showAssessment("")}>
+                    Create New Assessment
+                </button>
             </ul>
           ) : (
             <>
               <p>You have no assessments for this week</p>
-              <button onClick={() => showAssessment("")}>
+              <button className="bg-blue-300 p-2 w-full text-white rounded-md" onClick={() => showAssessment("")}>
                 Create Assessment
               </button>
             </>
