@@ -3,9 +3,12 @@ import { useState } from "react";
 import { BiMenuAltRight, BiPlus } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowDown, IoIosClose } from "react-icons/io";
 import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
+import Editor from "~/components/Editor.client";
 
 export default function CourseEdit() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [value, setValue] = useState("")
   return (
     <div className="w-screen h-screen">
       <header className="w-[100%] bg-white h-fit md:h-[15%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
@@ -62,7 +65,7 @@ export default function CourseEdit() {
             Course / Introduction to Python Coding
           </p>
         </div>
-        <div className="h-4/5">
+        <div className="h-4/5 flex">
           <div className="left flex h-full flex-col gap-4 pl-8 pr-5 py-4 bg-[#F3F4F5] w-1/4">
             <h3 className="text-xl font-semibold">Course Upload</h3>
             <div className="flex gap-4 flex-col">
@@ -89,7 +92,21 @@ export default function CourseEdit() {
               </div>
             </div>
           </div>
-          <div className="right"></div>
+          <div className="right p-6 gap-5 w-full  flex flex-col text-black">
+            <div className="flex text-lg font-medium gap-3">
+              <p className="text-[#0080FF]">Materials</p>
+              <p>Assessment</p>
+            </div>
+            <h1 className="text-2xl font-semibold">Python Essentials: Introduction to Data Science</h1>
+            <div className="flex gap-6 text-lg font-medium border-b">
+              <span>Notes</span>
+              <span>Slides</span>
+              <span>Video</span>
+            </div>
+            <div >
+                {/* <Editor value={value} setValue={()=>setValue} /> */}
+            </div>
+          </div>
         </div>
       </section>
     </div>
