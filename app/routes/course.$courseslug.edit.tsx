@@ -4,7 +4,7 @@ import { BiMenuAltRight, BiPlus } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowDown, IoIosClose } from "react-icons/io";
 import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
 import Editor from "~/components/Editor.client";
-import AssessmentForm from "~/components/Assessments/AssessmentForm";
+import QuestionComponent from "~/components/Assessments/QuestionComponent";
 
 export default function CourseEdit() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -131,7 +131,32 @@ export default function CourseEdit() {
               ) : (
               <section>
                 <h1 className="text-2xl font-semibold">Create Assessment</h1>
-               <AssessmentForm/>
+                <form className="flex flex-col gap-4">
+                  <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+                    <input
+                      type="text"
+                      className="mt-1 block w-full px-3 py-2 border bg-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter assessment title"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea
+                      className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter assessment description"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="questions" className="block text-sm font-medium text-gray-700">Questions</label>
+                    <div className="mt-1 flex flex-col gap-4">
+                      <QuestionComponent />
+                      <QuestionComponent />
+                      <QuestionComponent />
+                    </div>
+                  </div>
+                </form>
+               {/* <AssessmentForm/> */}
               </section>
               )}
             </div>
