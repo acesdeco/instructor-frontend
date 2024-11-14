@@ -87,6 +87,7 @@ const AssessmentForm: React.FC<QuestionProps> = ({
         <select
           className="border bg-white border-gray-300 text-sm p-1 rounded-md"
           id="questionType"
+          defaultValue={question_type}
           onChange={(e) => updateQuestion(id, 'question_type', e.target.value)}
         >
           <option value="objective">Objective</option>
