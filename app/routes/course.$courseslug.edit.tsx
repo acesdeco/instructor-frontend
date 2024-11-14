@@ -3,8 +3,8 @@ import { useState } from "react";
 import { BiMenuAltRight, BiPlus } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowDown, IoIosClose } from "react-icons/io";
 import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
-import Editor from "~/components/Editor.client";
 import QuestionComponent from "~/components/Assessments/QuestionComponent";
+import Editor from "~/components/editor";
 
 export default function CourseEdit() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,7 +12,7 @@ export default function CourseEdit() {
 
   const [value, setValue] = useState("");
   return (
-    <div className=" w-[100vw] h-[100vh] fixed">
+    <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
       <header className="w-[100%] bg-white h-fit md:h-[15%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
         <div id="left">
           <Link className="w-5" to="/dashboard/course">
@@ -67,7 +67,7 @@ export default function CourseEdit() {
             Course / Introduction to Python Coding
           </p>
         </div>
-        <div className="h-4/5 flex">
+        <div className="h-4/5 flex ">
           <div className="left flex h-full flex-col gap-4 pl-8 pr-5 py-4 bg-[#F3F4F5] w-1/4">
             <h3 className="text-xl font-semibold">Course Upload</h3>
             <div className="flex gap-4 flex-col">
@@ -94,7 +94,7 @@ export default function CourseEdit() {
               </div>
             </div>
           </div>
-          <div className="right p-6 gap-5 w-full  flex flex-col text-black">
+          <div className="right px-6 pt-6 gap-5 w-full overflow-auto  flex flex-col text-black">
             <div className="flex text-lg font-medium gap-3">
               <button
                 className={`cursor-pointer ${
@@ -125,7 +125,7 @@ export default function CourseEdit() {
                     <span>Video</span>
                   </div>
                   <div>
-                    <Editor value={value} setValue={() => setValue} />
+                    <Editor value={value} onChange={() => setValue} />
                   </div>
                 </section>
               ) : (
