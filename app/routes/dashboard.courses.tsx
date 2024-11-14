@@ -18,7 +18,7 @@ export const meta: MetaFunction = () => {
 };
 export default function Enrolled() {
   // const user = useOutletContext();
-  const { courses } = useLoaderData<typeof loader>();
+  const { courses, message } = useLoaderData<typeof loader>();
   return (
     <>
       <header className="mb-10">
@@ -28,17 +28,35 @@ export default function Enrolled() {
         {courses &&
           courses.length !== 0 &&
           courses.map((course, y) => (
-            <CourseCard key={y} course={course}></CourseCard>
+            <CourseCard key={y} course={course as ICourse}></CourseCard>
           ))}
-        {(!courses || courses.length === 0) && (
+        {courses.length < 1 && message ? (
           <div className=" col-span-2 text-center flex flex-col items-center">
             <img alt="Courses not found" src="/public/notfound.png"></img>
-            <p className="text-gray-900 text-xl font-medium">Your classroom awaits.</p>
-            <span className="text-gray-800 mb-2">Create your first course and start inspiring minds. Tap Create Course to Begin</span>
+            <p className="text-gray-900 text-xl font-medium">
+              Check Internet Connection
+            </p>
+            <span className="text-gray-800 mb-2">The network failee</span>
             <Link to={`/dashboard/courses`} className="w-fit">
-              <Button>Create Course</Button>
+              <Button>Reload</Button>
             </Link>
           </div>
+        ) : (
+          (!courses || courses.length === 0) && (
+            <div className=" col-span-2 text-center flex flex-col items-center">
+              <img alt="Courses not found" src="/public/notfound.png"></img>
+              <p className="text-gray-900 text-xl font-medium">
+                Your classroom awaits.
+              </p>
+              <span className="text-gray-800 mb-2">
+                Create your first course and start inspiring minds. Tap Create
+                Course to Begin
+              </span>
+              <Link to={`/dashboard/create-course`} className="w-fit">
+                <Button>Create Course</Button>
+              </Link>
+            </div>
+          )
         )}
       </section>
     </>
@@ -48,9 +66,10 @@ export default function Enrolled() {
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userState.parse(cookieHeader)) || {};
-  const enrolledCourses = await getCoursesByCreatorId(cookie.user._id);
+  const enrolledCourses = await getCoursesByCreatorId(cookie.user.user);
+  console.log(enrolledCourses, cookie.user.user);
   if (enrolledCourses.success === false) {
-    return json({ courses: [] });
+    return json({ courses: [], message: enrolledCourses.message });
   }
-  return json({ courses: enrolledCourses?.data as ICourse[] });
+  return json({ courses: enrolledCourses?.data as ICourse[], message: "" });
 }
