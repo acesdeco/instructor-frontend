@@ -4,13 +4,15 @@ import { BiMenuAltRight, BiPlus } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowDown, IoIosClose } from "react-icons/io";
 import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
 import Editor from "~/components/editor";
+import AssessmentForm from "~/components/Assessments/AssessmentForm";
 
 export default function CourseEdit() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("materials");
 
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState("");
   return (
-    <div className="w-screen h-screen overflow-y-auto">
+    <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
       <header className="w-[100%] bg-white h-fit md:h-[15%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
         <div id="left">
           <Link className="w-5" to="/dashboard/course">
@@ -92,19 +94,46 @@ export default function CourseEdit() {
               </div>
             </div>
           </div>
-          <div className="right h-full overflow-y-auto p-6 gap-5 w-full  flex flex-col text-black">
-            <div className="flex text-lg  font-medium gap-3">
-              <p className="text-[#0080FF]">Materials</p>
-              <p>Assessment</p>
+          <div className="right p-6 gap-5 w-full  flex flex-col text-black">
+            <div className="flex text-lg font-medium gap-3">
+              <button
+                className={`cursor-pointer ${
+                  activeTab === "materials" ? "text-[#0080FF]" : ""
+                }`}
+                onClick={() => setActiveTab("materials")}
+              >
+                Materials
+              </button>
+              <button
+                className={`cursor-pointer ${
+                  activeTab === "assessment" ? "text-[#0080FF]" : ""
+                }`}
+                onClick={() => setActiveTab("assessment")}
+              >
+                Assessment
+              </button>
             </div>
-            <h1 className="text-2xl font-semibold">Python Essentials: Introduction to Data Science</h1>
-            <div className="flex gap-6 text-lg font-medium border-b">
-              <span>Notes</span>
-              <span>Slides</span>
-              <span>Video</span>
-            </div>
-            <div >
-                <Editor value={value} onChange={setValue} />
+            <div className="mt-4">
+              {activeTab === "materials" ? (
+                <section>
+                  <h1 className="text-2xl font-semibold">
+                    Python Essentials: Introduction to Data Science
+                  </h1>
+                  <div className="flex gap-6 text-lg font-medium border-b">
+                    <span>Notes</span>
+                    <span>Slides</span>
+                    <span>Video</span>
+                  </div>
+                  <div>
+                    <Editor value={value} onChange={() => setValue} />
+                  </div>
+                </section>
+              ) : (
+              <section>
+                <h1 className="text-2xl font-semibold">Create Assessment</h1>
+               <AssessmentForm/>
+              </section>
+              )}
             </div>
           </div>
         </div>
