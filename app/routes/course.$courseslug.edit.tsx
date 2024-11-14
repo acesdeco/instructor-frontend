@@ -3,7 +3,7 @@ import { useState } from "react";
 import { BiMenuAltRight, BiPlus } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowDown, IoIosClose } from "react-icons/io";
 import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
-import QuestionComponent from "~/components/Assessments/QuestionComponent";
+import AssessmentComponent from "~/components/Assessments/LargeAssessmentComponent";
 import Editor from "~/components/editor";
 
 export default function CourseEdit() {
@@ -13,9 +13,9 @@ export default function CourseEdit() {
   const [value, setValue] = useState("");
   return (
     <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
-      <header className="w-[100%] bg-white h-fit md:h-[15%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
+      <header className="w-[100%] bg-white h-fit md:h-[10%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
         <div id="left">
-          <Link className="w-5" to="/dashboard/course">
+          <Link className="w-3" to="/dashboard/course">
             <img alt="Union" src="/Union.png"></img>
           </Link>
         </div>
@@ -58,8 +58,8 @@ export default function CourseEdit() {
           </div>
         </div>
       </header>
-      <section className="bg-white text-black w-full h-[85%]">
-        <div className="bg-[#0080ff] flex items-center gap-3 text-white px-10 py-4">
+      <section className="bg-blue-200 text-black w-full h-[90%] fixed pb-0">
+        <div className="bg-[#0080ff] flex items-center text-white px-10 py-4">
           <span className="cursor-pointer">
             <IoIosArrowBack size={30} />
           </span>
@@ -67,7 +67,7 @@ export default function CourseEdit() {
             Course / Introduction to Python Coding
           </p>
         </div>
-        <div className="h-4/5 flex ">
+        <div className="h-[90%] flex ">
           <div className="left flex h-full flex-col gap-4 pl-8 pr-5 py-4 bg-[#F3F4F5] w-1/4">
             <h3 className="text-xl font-semibold">Course Upload</h3>
             <div className="flex gap-4 flex-col">
@@ -94,7 +94,7 @@ export default function CourseEdit() {
               </div>
             </div>
           </div>
-          <div className="right px-6 pt-6 gap-5 w-full overflow-auto  flex flex-col text-black">
+          <div className="right px-6 pt-6 gap-5 w-full h-full bg-white pb-10 overflow-auto  flex flex-col text-black">
             <div className="flex text-lg font-medium gap-3">
               <button
                 className={`cursor-pointer ${
@@ -129,35 +129,7 @@ export default function CourseEdit() {
                   </div>
                 </section>
               ) : (
-              <section>
-                <h1 className="text-2xl font-semibold">Create Assessment</h1>
-                <form className="flex flex-col gap-4">
-                  <div>
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
-                    <input
-                      type="text"
-                      className="mt-1 block w-full px-3 py-2 border bg-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="Enter assessment title"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea
-                      className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="Enter assessment description"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="questions" className="block text-sm font-medium text-gray-700">Questions</label>
-                    <div className="mt-1 flex flex-col gap-4">
-                      <QuestionComponent />
-                      <QuestionComponent />
-                      <QuestionComponent />
-                    </div>
-                  </div>
-                </form>
-               {/* <AssessmentForm/> */}
-              </section>
+                <AssessmentComponent/>
               )}
             </div>
           </div>
