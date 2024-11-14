@@ -17,6 +17,8 @@ export interface IAssessment {
         }[];
     }[];
     dueDate: string;
+    startTime:string;
+    endTime: string;
 }
 
 interface ApiResponse {

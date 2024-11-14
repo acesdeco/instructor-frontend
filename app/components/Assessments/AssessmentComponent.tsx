@@ -20,15 +20,16 @@ interface AssessmentComponentProps {
   };
   weekId: string;
   courseId: string;
-  // user: {
-  //   name: string;
-  //   id: string;
-  // };
+  user: {
+    name: string;
+    id: string;
+  };
 }
 
 export const AssessmentComponent = ({
   weekId,
   courseId,
+  user,
 }: // user,
 AssessmentComponentProps) => {
   const [assessments, setAssessments] = useState([]);
@@ -57,7 +58,7 @@ AssessmentComponentProps) => {
       }
     };
     fetchAssessments();
-  }, [weekId, courseId]);
+  }, [weekId, courseId, singleAssessmentView]);
   if(loadingAssesments){
     return(
     <div className="flex justify-center items-center h-full">
@@ -68,13 +69,13 @@ AssessmentComponentProps) => {
   return (
     <>
       {singleAssessmentView ? (
-        <ActiveAs goBack={goBack} assessmentId={assessmentId} />
+        <ActiveAs goBack={goBack} courseId={courseId} weekId={weekId} user={user} assessmentId={assessmentId} />
       ) : (
         <section>
           {assessments.length > 0 ? (
             <ul>
               {assessments.map((assessment: IAssessment) => (
-                <li key={assessment._id}>
+                <li key={assessment._id} className="py-2">
                   <button onClick={() => showAssessment(assessment._id)} className="bg-blue-300 p-2 w-full text-left rounded-md">
                     <h3>{assessment.title}</h3>
                     <p className="text-sm text-gray-600">

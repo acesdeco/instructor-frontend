@@ -1,3 +1,5 @@
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowDown,} from "react-icons/io";
@@ -5,9 +7,18 @@ import { AssessmentComponent } from "~/components/Assessments/AssessmentComponen
 // import AssessmentComponent from "~/components/Assessments/LargeAssessmentComponent";
 import Editor from "~/components/editor";
 import { HeaderComp } from "~/components/Header";
+import { user as userState } from "~/serverstate.server";
+type LoaderData = {
+  user: {
+    fullName: string;
+    user: string;
+  };
+};
+
 export default function CourseEdit() {
   const [activeTab, setActiveTab] = useState("materials");
   const [value, setValue] = useState("");
+  const { user } = useLoaderData<LoaderData>();
   return (
     <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
       <HeaderComp/>
@@ -82,7 +93,7 @@ export default function CourseEdit() {
                   </div>
                 </section>
               ) : (
-                <AssessmentComponent courseId="6735c48c09cec90061065561" weekId="673612d59b484d00734caa2b"/>
+                <AssessmentComponent user={{name: user.fullName, id: user.user}} courseId="6735c48c09cec90061065561" weekId="673612d59b484d00734caa2b"/>
               )}
             </div>
           </div>
@@ -90,4 +101,11 @@ export default function CourseEdit() {
       </section>
     </div>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await userState.parse(cookieHeader)) || {};
+  console.log(cookie);
+  return json({ user: cookie.user });
 }

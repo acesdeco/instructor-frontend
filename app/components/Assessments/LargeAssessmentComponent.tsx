@@ -55,12 +55,15 @@ export default function AssessmentComponent({
               title: responseTr.title,
               description: responseTr.description,
               questions: responseTr.questions,
+              startTime: responseTr.startTime || new Date().toISOString().slice(0, 16),
+              endTime:
+                responseTr.endTime || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
             });
             setQuestions(responseTr.questions);
             setDataLoading(false);
           }
         } else {
-            setDataLoading(false);
+          setDataLoading(false);
           console.error("Failed to fetch assessment data:", response.message);
         }
       } catch (error) {
@@ -71,8 +74,8 @@ export default function AssessmentComponent({
 
     if (assessmentId) {
       fetchAssessmentData();
-    }else {
-        setDataLoading(false);
+    } else {
+      setDataLoading(false);
     }
   }, [assessmentId]);
   const [dataLoading, setDataLoading] = useState(true);
@@ -91,11 +94,13 @@ export default function AssessmentComponent({
     },
   ]);
 
-  const [assessment, setAssessment] = useState({
+const [assessment, setAssessment] = useState({
     title: "",
     description: "",
     questions: questions,
-  });
+    startTime: new Date().toISOString().slice(0, 16), // formatted as datetime-local
+    endTime: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16), // 3 days from now, formatted as datetime-local
+});
   const addQuestion = (text: string) => {
     const newQuestion = {
       id: questions.length + 1,
@@ -159,6 +164,7 @@ export default function AssessmentComponent({
       }
 
       alert("Assessment created successfully!");
+        goBack();
     } catch (error) {
       console.error("Error creating assessment:", error);
       alert("Error creating assessment. Please try again.");
@@ -219,6 +225,36 @@ export default function AssessmentComponent({
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             placeholder="Enter assessment description"
             onChange={(e) => updateAssessment("description", e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="startTime"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Start Time
+          </label>
+          <input
+            type="datetime-local"
+            className="mt-1 block w-full px-3 py-2 border bg-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            value={assessment.startTime}
+            onChange={(e) => updateAssessment("startTime", e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="endTime"
+            className="block text-sm font-medium text-gray-700"
+          >
+            End Time
+          </label>
+          <input
+            type="datetime-local"
+            className="mt-1 block w-full px-3 py-2 border bg-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            value={assessment.endTime}
+            onChange={(e) => updateAssessment("endTime", e.target.value)}
             required
           />
         </div>
