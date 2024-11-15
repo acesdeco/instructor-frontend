@@ -11,6 +11,7 @@ export interface IAssessment {
         id: string | number;
         question_text: string;
         question_type: string;
+        marks: number;
         options: {
             option_text: string;
             is_correct: boolean;

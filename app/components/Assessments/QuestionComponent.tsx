@@ -4,6 +4,7 @@ interface QuestionProps {
   question_text: string;
   question_type: string;
   options: { option_text: string; is_correct: boolean }[];
+  marks: number;
   removeQuestion: (id: string | number) => void;
 updateQuestion: (id: string | number, field: string, value: unknown) => void;
 }
@@ -12,6 +13,7 @@ const AssessmentForm: React.FC<QuestionProps> = ({
   question_text,
   question_type,
   options: formOptions,
+  marks,
   removeQuestion,
   updateQuestion
 }: QuestionProps) => {
@@ -79,6 +81,21 @@ const AssessmentForm: React.FC<QuestionProps> = ({
           onChange={(e) => updateQuestion(id, 'question_text', e.target.value)}
         //   readOnly
         />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium" htmlFor="questionType">
+          Marks Allotted
+        </label>
+        <input
+          className="border bg-white border-gray-300 text-sm p-1 rounded-md"
+          id="questionType"
+          defaultValue={marks}
+          onChange={(e) => updateQuestion(id, 'marks', e.target.value)}
+          type="number"
+        >
+          <option value="objective">Objective</option>
+          <option value="subjective">Subjective</option>
+        </input>
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium" htmlFor="questionType">

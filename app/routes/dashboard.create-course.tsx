@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, json, MetaFunction, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { createCourse, ICourse } from "~/axios/Courses";
 import Modal from "~/components/Modal";
@@ -11,6 +11,13 @@ export async function loader() {
 
   return json({});
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create Course" },
+    { name: "description", content: "Creating course..." },
+  ];
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");

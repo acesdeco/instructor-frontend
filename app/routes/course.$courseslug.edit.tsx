@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
@@ -13,6 +13,13 @@ type LoaderData = {
     fullName: string;
     user: string;
   };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Edit Course" },
+    { name: "description", content: "Editing course..." },
+  ];
 };
 
 export default function CourseEdit() {

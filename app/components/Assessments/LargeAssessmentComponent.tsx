@@ -19,6 +19,7 @@ interface Question {
   question_text: string;
   question_type: string;
   options: { option_text: string; is_correct: boolean }[];
+  marks: number;
 }
 
 interface AssessmentComponentProps {
@@ -85,12 +86,14 @@ export default function AssessmentComponent({
       question_text: "What is Python?",
       question_type: "objective",
       options: [{ option_text: "", is_correct: false }],
+      marks: 1,
     },
     {
       id: 2,
       question_text: "Explain the beginnings of python",
       question_type: "subjective",
       options: [{ option_text: "", is_correct: false }],
+      marks: 1,
     },
   ]);
 
@@ -107,6 +110,7 @@ const [assessment, setAssessment] = useState({
       question_text: text,
       question_type: "objective",
       options: [{ option_text: "", is_correct: false }],
+      marks: 1,
     };
     setQuestions([...questions, newQuestion]);
   };
@@ -275,6 +279,7 @@ const [assessment, setAssessment] = useState({
                   options={question.options}
                   removeQuestion={removeQuestion}
                   updateQuestion={updateQuestion}
+                  marks={question.marks}
                 />
                 <button
                   className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-blue-700"
