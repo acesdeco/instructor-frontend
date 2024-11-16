@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, json, MetaFunction, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { createCourse, ICourse } from "~/axios/Courses";
 import Modal from "~/components/Modal";
@@ -11,6 +11,13 @@ export async function loader() {
 
   return json({});
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create Course" },
+    { name: "description", content: "Creating course..." },
+  ];
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
@@ -28,18 +35,15 @@ export async function action({ request }: ActionFunctionArgs) {
     title: courseName,
     coursePrice: coursePrice,
     instructor: {
-      id: cookie.user.user,
-      name: cookie.user.fullName,
+      id: cookie.user.user || cookie.user._id,
+      name: cookie.user.fullName || cookie.user.firstName + " " + cookie.user.lastName,
     },
   };
-  console.log(courseData);
   const response = await createCourse(courseData);
   if (response.success && "data" in response) {
-    console.log("him", response);
     return redirect(`/course/${(response?.data as ICourse)?.slug}/edit`);
   }
   if (!response.success) {
-    console.log("him", response);
     return json({ responseError: { ...response } });
   }
   return response;

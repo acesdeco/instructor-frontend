@@ -1,65 +1,39 @@
-import { Link } from "@remix-run/react";
+import { json, LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { BiMenuAltRight, BiPlus } from "react-icons/bi";
-import { IoIosArrowBack, IoIosArrowDown, IoIosClose } from "react-icons/io";
-import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
-import Editor from "~/components/Editor.client";
-import AssessmentForm from "~/components/Assessments/AssessmentForm";
+import { BiPlus } from "react-icons/bi";
+import { IoIosArrowBack, IoIosArrowDown,} from "react-icons/io";
+import { AssessmentComponent } from "~/components/Assessments/AssessmentComponent";
+// import AssessmentComponent from "~/components/Assessments/LargeAssessmentComponent";
+import Editor from "~/components/editor";
+import { HeaderComp } from "~/components/Header";
+import { user as userState } from "~/serverstate.server";
+type LoaderData = {
+  user: {
+    fullName: string;
+    user: string;
+    _id: string;
+    lastName: string,
+    firstName: string,
+  };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Edit Course" },
+    { name: "description", content: "Editing course..." },
+  ];
+};
 
 export default function CourseEdit() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("materials");
-
   const [value, setValue] = useState("");
+  const { user } = useLoaderData<LoaderData>();
   return (
-    <div className=" w-[100vw] h-[100vh] fixed">
-      <header className="w-[100%] bg-white h-fit md:h-[15%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
-        <div id="left">
-          <Link className="w-5" to="/dashboard/course">
-            <img alt="Union" src="/Union.png"></img>
-          </Link>
-        </div>
-        <div className="flex flex-row items-center">
-          <div className="md:flex hidden flex-row items-center mx-10 border border-gray-200 rounded-lg ">
-            <input
-              className="text-black bg-transparent focus:outline-none focus:border-gray-500 px-3 p-1 rounded-l-md"
-              type="text"
-              placeholder="Search for a course"
-            />
-            <button
-              type="submit"
-              className="w-full h-full rounded-r-md bg-blue-600 p-1 px-4 border border-blue-600"
-            >
-              Search
-            </button>
-          </div>
-          <div className="w-6 mx-4">
-            <IoNotificationsOutline size={30} color="#1671d9" />
-          </div>
-          <div className="flex items-center gap-1 flex-row justify-center">
-            <div className="w-6 ">
-              <IoPersonCircleOutline size={30} color="#1671d9" />
-            </div>
-            <div className="md:flex hidden gap-3 justify-center items-center">
-              <button>
-                <IoIosArrowDown size={20} color="#1671d9" />
-              </button>
-            </div>
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="cursor-pointer md:hidden"
-            >
-              {isMenuOpen ? (
-                <IoIosClose size={30} color="#1671d9" />
-              ) : (
-                <BiMenuAltRight size={30} color="#1671d9" />
-              )}
-            </button>
-          </div>
-        </div>
-      </header>
-      <section className="bg-white text-black w-full h-[85%]">
-        <div className="bg-[#0080ff] flex items-center gap-3 text-white px-10 py-4">
+    <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
+      <HeaderComp/>
+      <section className="bg-blue-200 text-black w-full h-[90%] fixed pb-0">
+        <div className="bg-[#0080ff] flex items-center text-white px-10 py-4">
           <span className="cursor-pointer">
             <IoIosArrowBack size={30} />
           </span>
@@ -67,7 +41,7 @@ export default function CourseEdit() {
             Course / Introduction to Python Coding
           </p>
         </div>
-        <div className="h-4/5 flex">
+        <div className="h-[90%] flex ">
           <div className="left flex h-full flex-col gap-4 pl-8 pr-5 py-4 bg-[#F3F4F5] w-1/4">
             <h3 className="text-xl font-semibold">Course Upload</h3>
             <div className="flex gap-4 flex-col">
@@ -94,7 +68,7 @@ export default function CourseEdit() {
               </div>
             </div>
           </div>
-          <div className="right p-6 gap-5 w-full  flex flex-col text-black">
+          <div className="right px-6 pt-6 gap-5 w-full h-full bg-white pb-10 overflow-auto  flex flex-col text-black">
             <div className="flex text-lg font-medium gap-3">
               <button
                 className={`cursor-pointer ${
@@ -125,14 +99,11 @@ export default function CourseEdit() {
                     <span>Video</span>
                   </div>
                   <div>
-                    <Editor value={value} setValue={() => setValue} />
+                    <Editor value={value} onChange={() => setValue} />
                   </div>
                 </section>
               ) : (
-              <section>
-                <h1 className="text-2xl font-semibold">Create Assessment</h1>
-               <AssessmentForm/>
-              </section>
+                <AssessmentComponent user={{name: user.fullName || user.firstName + user.lastName, id: user.user || user._id}} courseId="" weekId=""/> // pass in appropriate props here for this to work properly
               )}
             </div>
           </div>
@@ -140,4 +111,14 @@ export default function CourseEdit() {
       </section>
     </div>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await userState.parse(cookieHeader)) || {};
+  if(cookie.user){
+    return json({ user: cookie.user });
+  }else {
+    return redirect("/auth/login");
+  }
 }
