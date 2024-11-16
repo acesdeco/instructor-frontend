@@ -57,7 +57,11 @@ AssessmentComponentProps) => {
         console.error("Error fetching assessments:", error);
       }
     };
-    fetchAssessments();
+    if(weekId){
+      fetchAssessments();
+    }else {
+      setLoadingAssessments(false);
+    }
   }, [weekId, courseId, singleAssessmentView]);
   if(loadingAssesments){
     return(
@@ -92,7 +96,7 @@ AssessmentComponentProps) => {
           ) : (
             <>
               <p>You have no assessments for this week</p>
-              <button className="bg-blue-300 p-2 w-full text-white rounded-md" onClick={() => showAssessment("")}>
+              <button className="bg-blue-600 p-2 w-full my-4 text-white rounded-md" onClick={() => showAssessment("")}>
                 Create Assessment
               </button>
             </>

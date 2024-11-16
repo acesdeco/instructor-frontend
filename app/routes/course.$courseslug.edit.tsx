@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { json, LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
@@ -12,6 +12,9 @@ type LoaderData = {
   user: {
     fullName: string;
     user: string;
+    _id: string;
+    lastName: string,
+    firstName: string,
   };
 };
 
@@ -100,7 +103,7 @@ export default function CourseEdit() {
                   </div>
                 </section>
               ) : (
-                <AssessmentComponent user={{name: user.fullName, id: user.user}} courseId="6735c48c09cec90061065561" weekId="673612d59b484d00734caa2b"/>
+                <AssessmentComponent user={{name: user.fullName || user.firstName + user.lastName, id: user.user || user._id}} courseId="" weekId=""/> // pass in appropriate props here for this to work properly
               )}
             </div>
           </div>
@@ -113,6 +116,9 @@ export default function CourseEdit() {
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userState.parse(cookieHeader)) || {};
-  console.log(cookie);
-  return json({ user: cookie.user });
+  if(cookie.user){
+    return json({ user: cookie.user });
+  }else {
+    return redirect("/auth/login");
+  }
 }

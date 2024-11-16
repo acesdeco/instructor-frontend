@@ -35,18 +35,15 @@ export async function action({ request }: ActionFunctionArgs) {
     title: courseName,
     coursePrice: coursePrice,
     instructor: {
-      id: cookie.user.user,
-      name: cookie.user.fullName,
+      id: cookie.user.user || cookie.user._id,
+      name: cookie.user.fullName || cookie.user.firstName + " " + cookie.user.lastName,
     },
   };
-  console.log(courseData);
   const response = await createCourse(courseData);
   if (response.success && "data" in response) {
-    console.log("him", response);
     return redirect(`/course/${(response?.data as ICourse)?.slug}/edit`);
   }
   if (!response.success) {
-    console.log("him", response);
     return json({ responseError: { ...response } });
   }
   return response;

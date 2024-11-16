@@ -92,10 +92,7 @@ const AssessmentForm: React.FC<QuestionProps> = ({
           defaultValue={marks}
           onChange={(e) => updateQuestion(id, 'marks', e.target.value)}
           type="number"
-        >
-          <option value="objective">Objective</option>
-          <option value="subjective">Subjective</option>
-        </input>
+        />
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium" htmlFor="questionType">

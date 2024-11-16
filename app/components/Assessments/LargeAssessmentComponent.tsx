@@ -133,7 +133,6 @@ const [assessment, setAssessment] = useState({
         question.id === id ? { ...question, [field]: value } : question
       )
     );
-    console.log(questions);
   };
 
   const validateAndSubmit = async () => {
@@ -160,6 +159,9 @@ const [assessment, setAssessment] = useState({
         created_by: user?.id,
         week_id: weekId,
         questions,
+        startTime: assessment.startTime,
+        endTime: assessment.endTime,
+        
       });
 
       if (!response.success) {
