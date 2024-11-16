@@ -9,7 +9,7 @@ export interface IUser {
   registrationNumber?: string;
   courses?: string[];
   role: string;
-  user: string;
+  user?: string;
   // Add other user properties here
 }
 

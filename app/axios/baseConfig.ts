@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-const API_URL = "https://manual-backend.onrender.com";
+const API_URL = "http://localhost:3000";
 console.log(API_URL);
 const baseConfig = axios.create({
   baseURL: `${API_URL}/api/v1`, // Replace with your API base URL
