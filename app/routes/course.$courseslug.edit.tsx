@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userState.parse(cookieHeader)) || {};
   console.log(cookie);
-  let { searchParams } = new URL(request.url);
   const slug = params.courseslug;
 
   const course: ICourse = await getCourseBySlug(slug as string);
@@ -66,56 +65,56 @@ export default function CourseEdit() {
   }: { course: ICourse; weeks: (typeof course.weeks)[0][]; user: IUser } =
     useLoaderData<typeof loader>();
   const [week, setWeek] = useState<(typeof course.weeks)[0] | null>();
-  const [isWeeksOpen, setIsWeeksOpen] = useState(true)
+  const [isWeeksOpen, setIsWeeksOpen] = useState(true);
   const [searchParams] = useSearchParams();
   const weekParams = searchParams.get("week");
- const navigate = useNavigate()
+  const navigate = useNavigate();
   console.log(weekParams);
   useEffect(() => {
     console.log(weekParams);
     if (weekParams) {
       setWeek(weeks[parseInt(weekParams) - 1]);
     } else {
-      console.log(course.weeks["1"]);
       setWeek(weeks[0]);
     }
-  }, [weekParams]);
+  }, [weekParams, weeks]);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdateWeek = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-         console.log(course.title);
-    if (week) {
-      const data: ICourse["weeks"][0] = (await updateWeek(week._id, week)).data;
-      if (data) {
-        redirect(`/course/${course.slug}/edit?week=${week.weekNumber}`);
+      console.log(course.title);
+      if (week) {
+        const data: ICourse["weeks"][0] = (await updateWeek(week._id, week))
+          .data;
+        if (data) {
+          redirect(`/course/${course.slug}/edit?week=${week.weekNumber}`);
+        }
       }
-    } 
     } catch (error) {
-      console.log(error)
-    }finally{
-      setIsLoading(false)
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleCreateNewWeek = async () => {
-   setIsLoading(true)
+    setIsLoading(true);
     try {
-          const data = await addWeek(course._id as string, {
-      weekNumber: weeks.length + 1,
-      topic: "Untitled",
-      notes: "This",
-      video: "hello.mp3",
-    });
-    if (data) {
-      navigate(`/course/${course.slug}/edit?week=${data.weekNumber}`);
-    }
+      const data = await addWeek(course._id as string, {
+        weekNumber: weeks.length + 1,
+        topic: "Untitled",
+        notes: "This",
+        video: "hello.mp3",
+      });
+      if (data) {
+        navigate(`/course/${course.slug}/edit?week=${data.weekNumber}`);
+      }
     } catch (error) {
-      console.log(error)
-    }finally{
-      setIsLoading(false)
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,13 +122,16 @@ export default function CourseEdit() {
   return (
     <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
       <HeaderComp />
-      <Overloader isLoading={isLoading}/>
+      <Overloader isLoading={isLoading} />
       <section className="bg-blue-200 text-black w-full h-[90%] fixed pb-0">
         <div className="bg-[#0080ff] flex items-center text-white px-10 py-4">
           <span className="cursor-pointer">
             <IoIosArrowBack size={30} />
           </span>
-          <p className="text-xl font-semibold"> <Link to={"/dashboard/courses"}>Course</Link> / {course.title}</p>
+          <p className="text-xl font-semibold">
+            {" "}
+            <Link to={"/dashboard/courses"}>Course</Link> / {course.title}
+          </p>
         </div>
         <div className="h-[90%] flex ">
           <div className="left flex h-full flex-col gap-4 pl-8 pr-5 py-4 bg-[#F3F4F5] w-1/4">
@@ -149,39 +151,46 @@ export default function CourseEdit() {
                     </span>
                     <span
                       className="cursor-pointer"
-                      onClick={() =>  setIsWeeksOpen(!isWeeksOpen)}
+                      onClick={() => setIsWeeksOpen(!isWeeksOpen)}
                     >
                       <IoIosArrowDown size={22} />
                     </span>
                   </div>
                 </div>
-                <div className={`weeks flex flex-col duration-300 gap-3 ${isWeeksOpen ? "h-full" : "h-0 overflow-hidden"}`}>
-                  {weeks.length < 1 ?  (
+                <div
+                  className={`weeks flex flex-col duration-300 gap-3 ${
+                    isWeeksOpen ? "h-full" : "h-0 overflow-hidden"
+                  }`}
+                >
+                  {weeks.length < 1 ? (
                     <div className="h-full justify-center flex-col items-center w-full flex">
-                        <p className="text-sm">No Weeks added yet</p>
-                        <p className="flex items-center font-medium">Press <BiPlus size={25}/> to add week</p>
+                      <p className="text-sm">No Weeks added yet</p>
+                      <p className="flex items-center font-medium">
+                        Press <BiPlus size={25} /> to add week
+                      </p>
                     </div>
-                  ) :weeks.map((aWeek, index) => (
-                    <Link
-                      to={`?week=${index + 1}`}
-                      key={aWeek._id}
-                      className={`aweek cursor-pointer hover:bg-slate-400 flex text-sm items-center gap-2 p-2 rounded-md ${
-                        parseInt(weekParams as string) == index + 1
-                          ? "bg-slate-200 "
-                          : ""
-                      }`}
-                    >
-                      <span className="w-8 flex justify-center items-center h-8 bg-[#A9D4FF] rounded-full">
-                        0{index + 1}
-                      </span>
-                      <p className="font-medium ">{aWeek.topic}</p>
-                    </Link>
-                  ))}
+                  ) : (
+                    weeks.map((aWeek, index) => (
+                      <Link
+                        to={`?week=${index + 1}`}
+                        key={aWeek._id}
+                        className={`aweek cursor-pointer hover:bg-slate-400 flex text-sm items-center gap-2 p-2 rounded-md ${
+                          parseInt(weekParams as string) == index + 1
+                            ? "bg-slate-200 "
+                            : ""
+                        }`}
+                      >
+                        <span className="w-8 flex justify-center items-center h-8 bg-[#A9D4FF] rounded-full">
+                          0{index + 1}
+                        </span>
+                        <p className="font-medium ">{aWeek.topic}</p>
+                      </Link>
+                    ))
+                  )}
                 </div>
                 <h3 className="text-lg font-semibold">Submissions</h3>
                 <h3 className="text-lg font-semibold">Assessment</h3>
               </div>
-
             )}
           </div>
           <div className="right px-6 pt-6 gap-5 w-full h-full bg-white pb-10 overflow-auto  flex flex-col text-black">
@@ -216,7 +225,7 @@ export default function CourseEdit() {
                 </>
               ) : (
                 <AssessmentComponent
-                  user={{ name: (user?.fullName as string), id: user.user }}
+                  user={{ name: user?.fullName as string, id: user.user }}
                   courseId="6735c48c09cec90061065561"
                   weekId="673612d59b484d00734caa2b"
                 />
