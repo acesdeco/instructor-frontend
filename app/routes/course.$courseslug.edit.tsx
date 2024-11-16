@@ -16,7 +16,17 @@ type LoaderData = {
   user: {
     fullName: string;
     user: string;
+    _id: string;
+    lastName: string;
+    firstName: string;
   };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Edit Course" },
+    { name: "description", content: "Editing course..." },
+  ];
 };
 import { LoaderFunction, redirect, json } from "@remix-run/node";
 import {
@@ -225,7 +235,7 @@ export default function CourseEdit() {
                 </>
               ) : (
                 <AssessmentComponent
-                  user={{ name: user?.fullName as string, id: user.user }}
+                  user={{ name: user.fullName, id: user.user }}
                   courseId="6735c48c09cec90061065561"
                   weekId="673612d59b484d00734caa2b"
                 />
@@ -236,4 +246,11 @@ export default function CourseEdit() {
       </section>
     </div>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await userState.parse(cookieHeader)) || {};
+  console.log(cookie);
+  return json({ user: cookie.user });
 }

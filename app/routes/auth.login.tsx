@@ -81,7 +81,7 @@ export default function Index() {
           <div className="bg-white w-1/2 absolute p-6 rounded shadow-lg">
             <h2 className="text-xl font-bold mb-4 text-gray-600">Error</h2>
             <p className="text-sm text-gray-600">
-              {actionData.responseError.details?.details || actionData.responseError.message}
+            {actionData.responseError.details?.message || actionData.responseError.message }
             </p>
             <button
               onClick={() => setModalOpen(false)}
