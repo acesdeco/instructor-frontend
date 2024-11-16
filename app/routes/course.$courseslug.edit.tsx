@@ -7,7 +7,9 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { BiPlus } from "react-icons/bi";
-import { LoaderFunction, redirect, json, MetaFunction } from "@remix-run/node";
+import { LoaderFunction, 
+  redirect, 
+  json, MetaFunction } from "@remix-run/node";
 import {
   addWeek,
   getCourseBySlug,
@@ -87,7 +89,7 @@ export default function CourseEdit() {
     } else {
       setWeek(weeks[0]);
     }
-  }, [weekParams, weeks]);
+  }, [weekParams, weeks, week]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -152,18 +154,18 @@ export default function CourseEdit() {
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">Content</h3>
                   <div className="flex items-center gap-4">
-                    <span
+                    <button
                       className="cursor-pointer"
                       onClick={handleCreateNewWeek}
                     >
                       <BiPlus size={22} />
-                    </span>
-                    <span
+                    </button>
+                    <button
                       className="cursor-pointer"
                       onClick={() => setIsWeeksOpen(!isWeeksOpen)}
                     >
                       <IoIosArrowDown size={22} />
-                    </span>
+                    </button>
                   </div>
                 </div>
                 <div
@@ -243,8 +245,8 @@ export default function CourseEdit() {
               ) : (
                 <AssessmentComponent
                   user={{ name: user.fullName as string, id: user.user }}
-                  courseId="6735c48c09cec90061065561"
-                  weekId="673612d59b484d00734caa2b"
+                  courseId={course._id as string}
+                  weekId={week!._id as string}
                 />
               )}
             </div>

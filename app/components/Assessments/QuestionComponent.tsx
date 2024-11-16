@@ -17,6 +17,7 @@ const AssessmentForm: React.FC<QuestionProps> = ({
   removeQuestion,
   updateQuestion
 }: QuestionProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [options, setOptions] = useState([
     { option_text: "", is_correct: false },
   ]);
@@ -47,7 +48,7 @@ const AssessmentForm: React.FC<QuestionProps> = ({
   };
 
   const removeOption = (index: number) => {
-    const newOptions = options.filter((_, i) => i !== index);
+    const newOptions = formOptions.filter((_, i) => i !== index);
     updateQuestion(id, 'options', newOptions);
     if (correctAnswer === index) {
       setCorrectAnswer(null);
