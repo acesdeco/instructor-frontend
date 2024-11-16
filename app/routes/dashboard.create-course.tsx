@@ -1,4 +1,9 @@
-import { ActionFunctionArgs, json, MetaFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  json,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { createCourse, ICourse } from "~/axios/Courses";
 import Modal from "~/components/Modal";
@@ -36,7 +41,9 @@ export async function action({ request }: ActionFunctionArgs) {
     coursePrice: coursePrice,
     instructor: {
       id: cookie.user.user || cookie.user._id,
-      name: cookie.user.fullName || cookie.user.firstName + " " + cookie.user.lastName,
+      name:
+        cookie.user.fullName ||
+        cookie.user.firstName + " " + cookie.user.lastName,
     },
   };
   const response = await createCourse(courseData);
@@ -57,54 +64,53 @@ export default function CreateCourse() {
         header="Create Course"
         isForm={true}
         acceptText="Create Course"
-        content={
-          <div className="flex gap-5 flex-col">
-            <div className="flex gap-1 flex-col">
-              <label className="text-black" htmlFor="Course name">
-                Course Name
-              </label>
-              <input
-                id="coursename"
-                name="coursename"
-                className="bg-white focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
-                type="text"
-              />
-            </div>
-            <div className="flex gap-1 flex-col">
-              <label className="text-black" htmlFor="Course name">
-                Course Code
-              </label>
-              <input
-                id="coursecode"
-                name="coursecode"
-                className="bg-white focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
-                type="text"
-              />
-            </div>
-            <div className="flex gap-1 flex-col">
-              <label className="text-black" htmlFor="Course name">
-                Course Price
-              </label>
-              <input
-                id="courseprice"
-                name="courseprice"
-                className="bg-white focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
-                type="text"
-              />
-            </div>
-            <div className="flex  h-48 flex-col">
-              <label className="text-black" htmlFor="Course name">
-                Course Description
-              </label>
-              <textarea
-                id="coursedesc"
-                name="coursedesc"
-                className="bg-white h-28 resize-none focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
-              />
-            </div>
+      >
+        <div className="flex gap-5 flex-col">
+          <div className="flex gap-1 flex-col">
+            <label className="text-black" htmlFor="Course name">
+              Course Name
+            </label>
+            <input
+              id="coursename"
+              name="coursename"
+              className="bg-white focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
+              type="text"
+            />
           </div>
-        }
-      />
+          <div className="flex gap-1 flex-col">
+            <label className="text-black" htmlFor="Course name">
+              Course Code
+            </label>
+            <input
+              id="coursecode"
+              name="coursecode"
+              className="bg-white focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
+              type="text"
+            />
+          </div>
+          <div className="flex gap-1 flex-col">
+            <label className="text-black" htmlFor="Course name">
+              Course Price
+            </label>
+            <input
+              id="courseprice"
+              name="courseprice"
+              className="bg-white focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
+              type="text"
+            />
+          </div>
+          <div className="flex  h-48 flex-col">
+            <label className="text-black" htmlFor="Course name">
+              Course Description
+            </label>
+            <textarea
+              id="coursedesc"
+              name="coursedesc"
+              className="bg-white h-28 resize-none focus:outline-none outline-none border-b-2 border-b-[#D9D9D9] text-black"
+            />
+          </div>
+        </div>
+      </Modal>
     </Form>
   );
 }

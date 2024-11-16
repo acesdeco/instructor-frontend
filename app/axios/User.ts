@@ -4,10 +4,12 @@ export interface IUser {
   email?: string;
   password?: string;
   firstName?: string;
+  fullName?: string;
   lastName?: string;
   registrationNumber?: string;
   courses?: string[];
   role: string;
+  user: string;
   // Add other user properties here
 }
 

@@ -70,6 +70,8 @@ AssessmentComponentProps) => {
     </div>
     );
   }
+
+  /* HTML: <div class="loader"></div> */
   return (
     <>
       {singleAssessmentView ? (
