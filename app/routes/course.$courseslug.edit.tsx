@@ -7,6 +7,18 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { BiPlus } from "react-icons/bi";
+import { LoaderFunction, redirect, json, MetaFunction } from "@remix-run/node";
+import {
+  addWeek,
+  getCourseBySlug,
+  getWeeksByCoursesId,
+  ICourse,
+  updateCourse,
+  updateWeek,
+} from "~/axios/Courses";
+import CourseInput from "~/components/Courses/CourseEditing";
+import { IUser } from "~/axios/User";
+import Overloader from "~/components/overloader";
 import { IoIosArrowBack, IoIosArrowDown } from "react-icons/io";
 import { AssessmentComponent } from "~/components/Assessments/AssessmentComponent";
 // import AssessmentComponent from "~/components/Assessments/LargeAssessmentComponent";
@@ -28,18 +40,6 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Editing course..." },
   ];
 };
-import { LoaderFunction, redirect, json } from "@remix-run/node";
-import {
-  addWeek,
-  getCourseBySlug,
-  getWeeksByCoursesId,
-  ICourse,
-  updateCourse,
-  updateWeek,
-} from "~/axios/Courses";
-import CourseInput from "~/components/Courses/CourseEditing";
-import { IUser } from "~/axios/User";
-import Overloader from "~/components/overloader";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const cookieHeader = request.headers.get("Cookie");
@@ -99,7 +99,7 @@ export default function CourseEdit() {
         const data: ICourse["weeks"][0] = (await updateWeek(week._id, week))
           .data;
         if (data) {
-          redirect(`/course/${course.slug}/edit?week=${week.weekNumber}`);
+          navigate(`/course/${course.slug}/edit?week=${week.weekNumber}`);
         }
       }
     } catch (error) {
@@ -128,13 +128,12 @@ export default function CourseEdit() {
     }
   };
 
-  const [value, setValue] = useState("");
   return (
     <div className=" w-[100vw] h-[100vh] fixed overflow-y-auto">
       <HeaderComp />
       <Overloader isLoading={isLoading} />
       <section className="bg-blue-200 text-black w-full h-[90%] fixed pb-0">
-        <div className="bg-[#0080ff] flex items-center text-white px-10 py-4">
+        <div className="bg-[#0000ff] flex items-center text-white px-10 py-4">
           <span className="cursor-pointer">
             <IoIosArrowBack size={30} />
           </span>
@@ -221,6 +220,14 @@ export default function CourseEdit() {
               >
                 Assessment
               </button>
+              <div className="flex w-fit self-end justify-self-end">
+                <button
+                  onClick={handleUpdateWeek}
+                  className="bg-blue-700 text-white px-4 py-1 rounded-md"
+                >
+                  Save
+                </button>
+              </div>
             </div>
             <div className="mt-4 flex flex-col gap-3">
               {activeTab === "materials" ? (
@@ -235,7 +242,7 @@ export default function CourseEdit() {
                 </>
               ) : (
                 <AssessmentComponent
-                  user={{ name: user.fullName, id: user.user }}
+                  user={{ name: user.fullName as string, id: user.user }}
                   courseId="6735c48c09cec90061065561"
                   weekId="673612d59b484d00734caa2b"
                 />
@@ -246,11 +253,4 @@ export default function CourseEdit() {
       </section>
     </div>
   );
-}
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await userState.parse(cookieHeader)) || {};
-  console.log(cookie);
-  return json({ user: cookie.user });
 }

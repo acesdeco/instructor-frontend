@@ -2,7 +2,7 @@ export default function Modal({
   isModalOpen,
   setModalOpen,
   header,
-  content,
+  children,
   onAccept,
   acceptText,
   isForm,
@@ -10,7 +10,7 @@ export default function Modal({
   isModalOpen: boolean;
   setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   header: string;
-  content: React.ReactNode;
+  children: React.ReactNode;
   onAccept?: () => void;
   acceptText?: string;
   isForm?: boolean;
@@ -23,8 +23,8 @@ export default function Modal({
     >
       <div className="md:w-1/2 absolute p-6 rounded shadow-lg">
         <h2 className="text-xl font-bold mb-4 text-gray-600">{header}</h2>
-        <div>{content}</div>
-        <div className="w-full flex justify-end">
+        <div>{children}</div>
+        <div className="w-full flex gap-2 justify-end">
           {acceptText && (
             <button
               type={isForm ? "submit" : "button"}
