@@ -13,7 +13,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  ssr: {
-    noExternal: ["remix-utils"],
+  define: {
+    "process.env": {},
   },
 });
