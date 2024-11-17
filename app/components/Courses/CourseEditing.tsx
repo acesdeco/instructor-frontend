@@ -11,9 +11,7 @@ export default function CourseInput({
 }: {
   week: ICourse["weeks"][0];
   submit: () => void;
-  setWeek: React.Dispatch<
-    React.SetStateAction<ICourse["weeks"][0] | null | undefined>
-  >;
+  setWeek: React.Dispatch<React.SetStateAction<ICourse["weeks"][0]>>;
 }) {
   const [activeTab, setActiveTab] = useState<"notes" | "slides" | "video">(
     "notes"
@@ -21,13 +19,13 @@ export default function CourseInput({
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string>("");
   const handleEditorChange = (change: string) => {
-    setWeek((prev) => (prev ? { ...prev, notes: change } : prev));
+    setWeek((prev) => ({ ...prev, notes: change }));
     console.log(week);
   };
 
   const handleEmbedVideo = () => {
     if (videoUrl) {
-      setWeek((prev) => (prev ? { ...prev, video: videoUrl } : prev));
+      setWeek((prev) => ({ ...prev, video: videoUrl }));
     }
     setIsVideoModalOpen(false);
     console.log(week, "not for the weak");
@@ -37,7 +35,7 @@ export default function CourseInput({
     <section className="flex flex-col gap-4">
       <input
         className="text-2xl hover:border-b py-2 text-black  font-semibold bg-transparent focus:outline-none"
-        value={week?.topic}
+        value={week.topic}
         placeholder="Add Course"
         onChange={(e) =>
           setWeek((prev) => (prev ? { ...prev, topic: e.target.value } : prev))

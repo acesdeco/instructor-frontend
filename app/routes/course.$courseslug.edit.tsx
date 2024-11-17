@@ -7,9 +7,12 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { BiPlus } from "react-icons/bi";
-import { LoaderFunction, 
-  // redirect, 
-  json, MetaFunction } from "@remix-run/node";
+import {
+  LoaderFunction,
+  // redirect,
+  json,
+  MetaFunction,
+} from "@remix-run/node";
 import {
   addWeek,
   getCourseBySlug,
@@ -117,8 +120,8 @@ export default function CourseEdit() {
       const data = await addWeek(course._id as string, {
         weekNumber: weeks.length + 1,
         topic: "Untitled",
-        notes: "This",
-        video: "hello.mp3",
+        notes: "",
+        video: "",
       });
       if (data) {
         navigate(`/course/${course.slug}/edit?week=${data.weekNumber}`);
@@ -238,13 +241,16 @@ export default function CourseEdit() {
                     <CourseInput
                       submit={handleUpdateWeek}
                       week={week}
-                      setWeek={setWeek}
+                      setWeek={setWeek as typeof week}
                     />
                   )}
                 </>
               ) : (
                 <AssessmentComponent
-                  user={{ name: user.fullName as string, id: user.user || user._id }}
+                  user={{
+                    name: user.fullName as string,
+                    id: user.user || user._id,
+                  }}
                   courseId={course._id as string}
                   weekId={week!._id as string}
                 />
