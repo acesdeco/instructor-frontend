@@ -2,20 +2,20 @@ import {
   Link,
   useLoaderData,
   useNavigate,
-  useNavigation,
+  // useNavigation,
   useSearchParams,
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { LoaderFunction, 
-  redirect, 
+  // redirect, 
   json, MetaFunction } from "@remix-run/node";
 import {
   addWeek,
   getCourseBySlug,
   getWeeksByCoursesId,
   ICourse,
-  updateCourse,
+  // updateCourse,
   updateWeek,
 } from "~/axios/Courses";
 import CourseInput from "~/components/Courses/CourseEditing";
@@ -26,15 +26,15 @@ import { AssessmentComponent } from "~/components/Assessments/AssessmentComponen
 // import AssessmentComponent from "~/components/Assessments/LargeAssessmentComponent";
 import { HeaderComp } from "~/components/Header";
 import { user as userState } from "~/serverstate.server";
-type LoaderData = {
-  user: {
-    fullName: string;
-    user: string;
-    _id: string;
-    lastName: string;
-    firstName: string;
-  };
-};
+// type LoaderData = {
+//   user: {
+//     fullName: string;
+//     user: string;
+//     _id: string;
+//     lastName: string;
+//     firstName: string;
+//   };
+// };
 
 export const meta: MetaFunction = () => {
   return [
@@ -244,7 +244,7 @@ export default function CourseEdit() {
                 </>
               ) : (
                 <AssessmentComponent
-                  user={{ name: user.fullName as string, id: user.user }}
+                  user={{ name: user.fullName as string, id: user.user || user._id }}
                   courseId={course._id as string}
                   weekId={week!._id as string}
                 />
