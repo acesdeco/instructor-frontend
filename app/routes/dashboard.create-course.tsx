@@ -4,11 +4,27 @@ import {
   MetaFunction,
   redirect,
 } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { createCourse, ICourse } from "~/axios/Courses";
+import { IUser } from "~/axios/User";
 import Modal from "~/components/Modal";
 import { user as userState } from "~/serverstate.server";
 
+
+type ActionData = {
+  validationErrors?: { [key: string]: string };
+  data?: IUser;
+  responseError?: {
+    success: boolean;
+    message: string;
+    details?: {
+      code: number;
+      message: string;
+      details?: string;
+    };
+  };
+};
 export async function loader() {
   // {
   //   request,
@@ -47,6 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
     },
   };
   const response = await createCourse(courseData);
+  console.log(response);
   if (response.success && "data" in response) {
     return redirect(`/course/${(response?.data as ICourse)?.slug}/edit`);
   }
@@ -57,7 +74,39 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function CreateCourse() {
+  const actionData = useActionData<ActionData>();
+  const [modalOpen, setModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    if (actionData?.responseError) {
+      setIsSubmitting(false);
+      setModalOpen(true);
+    }
+    if(actionData?.validationErrors) {
+      setIsSubmitting(false);
+    }
+  }, [actionData]);
   return (
+    <>
+    {actionData?.responseError && modalOpen && (
+      <div className="fixed h-screen z-50 w-screen inset-0 flex items-center justify-center bg-opacity-50 bg-black">
+        <div className="bg-white w-1/2 absolute p-6 rounded shadow-lg">
+          <h2 className="text-xl font-bold mb-4 text-gray-600">
+            Error
+          </h2>
+          <p className="text-sm text-gray-600">
+          {actionData.responseError.details?.message || actionData.responseError.message }
+          </p>
+          <button
+            onClick={() => setModalOpen(false)}
+            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )}
     <Form key={"create"} id="create-form" method="post">
       <Modal
         isModalOpen={true}
@@ -112,5 +161,6 @@ export default function CreateCourse() {
         </div>
       </Modal>
     </Form>
+    </>
   );
 }
