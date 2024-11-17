@@ -1,5 +1,6 @@
 import { baseConfig as api, axios, AxiosError } from "./baseConfig";
 export interface IUser {
+  _id: string;
   id?: string;
   email?: string;
   password?: string;
