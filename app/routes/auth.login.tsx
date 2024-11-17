@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
     password,
     // add other required fields if any
   };
-  const response = await loginUser({...user, role: 'instructor'});
+  const response = await loginUser({ ...user, role: "instructor" });
   console.log("response:", response);
   if (response.success && "data" in response) {
     const cookieHeader = request.headers.get("Cookie");
@@ -81,7 +81,8 @@ export default function Index() {
           <div className="bg-white w-1/2 absolute p-6 rounded shadow-lg">
             <h2 className="text-xl font-bold mb-4 text-gray-600">Error</h2>
             <p className="text-sm text-gray-600">
-            {actionData.responseError.details?.message || actionData.responseError.message }
+              {actionData.responseError.details?.message ||
+                actionData.responseError.message}
             </p>
             <button
               onClick={() => setModalOpen(false)}
@@ -185,9 +186,6 @@ export default function Index() {
 export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userState.parse(cookieHeader)) || {};
-  console.log('cookie:',cookie);
-  if (cookie.user) {
-    return redirect("/dashboard/courses");
-  }
+  console.log("cookie:", cookie);
   return null;
 };
