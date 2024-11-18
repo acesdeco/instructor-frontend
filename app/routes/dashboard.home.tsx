@@ -24,7 +24,7 @@ export default function Dashboard() {
       <header className="mb-10 flex flex-row items-center justify-between">
         <h1 className="text-black text-2xl font-semibold">Courses</h1>
         <Link to={`/dashboard/create-course`} className="w-fit">
-        <button className="bg-[#001633] px-4 py-2 rounded-md">
+        <button className="bg-[#001633] text-white px-4 py-2 rounded-md">
           Create Course
         </button>
         </Link>
@@ -37,7 +37,7 @@ export default function Dashboard() {
               bring more light to the world. Thank you for being amazing.
             </p>
             <Link to={`/dashboard/create-course`} className="w-fit">
-            <button className="bg-[#001633] px-4 py-2 rounded-md mt-2">
+            <button className="bg-[#001633] text-white px-4 py-2 rounded-md mt-2">
               Create Course
             </button>
             </Link>
