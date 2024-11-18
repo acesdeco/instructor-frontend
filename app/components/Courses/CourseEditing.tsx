@@ -1,6 +1,6 @@
 import { ICourse } from "~/axios/Courses";
 import QuillEditor from "../editor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import "node_modules/video-react/dist/video-react.css";
 import Player from "react-player/lazy";
@@ -10,36 +10,63 @@ export default function CourseInput({
   submit,
 }: {
   week: ICourse["weeks"][0];
-  submit: () => void;
-  setWeek: React.Dispatch<React.SetStateAction<ICourse["weeks"][0]>>;
+  submit: (week: ICourse["weeks"][0]) => void;
+  setWeek: React.Dispatch<
+    React.SetStateAction<ICourse["weeks"][0] | null | undefined>
+  >;
 }) {
   const [activeTab, setActiveTab] = useState<"notes" | "slides" | "video">(
     "notes"
   );
+
+  const [weekTopicInp, setWeekTopicInp] = useState("");
+  const [weekNotesInp, setWeekNotesInp] = useState("");
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string>("");
   const handleEditorChange = (change: string) => {
-    setWeek((prev) => ({ ...prev, notes: change }));
+    setWeekNotesInp(change);
     console.log(week);
   };
 
+  useEffect(() => {
+    setWeekNotesInp(week.notes);
+    setWeekTopicInp(week.topic);
+    setVideoUrl(week.video);
+  }, []);
   const handleEmbedVideo = () => {
     if (videoUrl) {
-      setWeek((prev) => ({ ...prev, video: videoUrl }));
+      setWeek((prev) => (prev ? { ...prev, video: videoUrl } : prev));
     }
     setIsVideoModalOpen(false);
     console.log(week, "not for the weak");
   };
   console.log(week, "not for the weak");
+
+  const handleSubmit = () => {
+    const updatedWeek = {
+      ...week,
+      video: videoUrl,
+      notes: weekNotesInp,
+      topic: weekTopicInp,
+    };
+
+    submit(updatedWeek);
+  };
   return (
     <section className="flex flex-col gap-4">
+      <div>
+        <button
+          onClick={handleSubmit}
+          className="py-2  px-5 text-white bg-blue-700 rounded-md"
+        >
+          Save
+        </button>
+      </div>
       <input
         className="text-2xl hover:border-b py-2 text-black  font-semibold bg-transparent focus:outline-none"
-        value={week.topic}
+        value={weekTopicInp}
         placeholder="Add Course"
-        onChange={(e) =>
-          setWeek((prev) => (prev ? { ...prev, topic: e.target.value } : prev))
-        }
+        onChange={(e) => setWeekTopicInp(e.target.value)}
         onBlur={(e) => {
           if (e.target.value.trim() === "") {
             // setTopicInput("Add Course Topic...")
@@ -80,7 +107,7 @@ export default function CourseInput({
       </div>
       <div className="flex h-[30vh] w-full flex-col">
         {activeTab == "notes" ? (
-          <QuillEditor value={week.notes} onChange={handleEditorChange} />
+          <QuillEditor value={weekNotesInp} onChange={handleEditorChange} />
         ) : activeTab == "slides" ? (
           "This ought to be the the slides parts"
         ) : (
@@ -105,7 +132,7 @@ export default function CourseInput({
             <div className="gap-3 flex flex-col w-full justify-center items-center">
               {week.video && (
                 <div className="video-wrapper">
-                  <Player url={week.video} />
+                  <Player url={videoUrl} />
                 </div>
               )}
               <section className="flex gap-2">

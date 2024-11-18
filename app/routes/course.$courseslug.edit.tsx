@@ -18,6 +18,7 @@ import {
   getCourseBySlug,
   getWeeksByCoursesId,
   ICourse,
+  updateCourse,
   // updateCourse,
   updateWeek,
 } from "~/axios/Courses";
@@ -29,6 +30,7 @@ import { AssessmentComponent } from "~/components/Assessments/AssessmentComponen
 // import AssessmentComponent from "~/components/Assessments/LargeAssessmentComponent";
 import { HeaderComp } from "~/components/Header";
 import { user as userState } from "~/serverstate.server";
+import Toggle from "~/components/ToggleComponent";
 // type LoaderData = {
 //   user: {
 //     fullName: string;
@@ -79,7 +81,9 @@ export default function CourseEdit() {
     user,
   }: { course: ICourse; weeks: (typeof course.weeks)[0][]; user: IUser } =
     useLoaderData<typeof loader>();
-  const [week, setWeek] = useState<(typeof course.weeks)[0] | null>();
+  const [week, setWeek] = useState<(typeof course.weeks)[0] | null | undefined>(
+    undefined
+  );
   const [isWeeksOpen, setIsWeeksOpen] = useState(true);
   const [searchParams] = useSearchParams();
   const weekParams = searchParams.get("week");
@@ -96,15 +100,36 @@ export default function CourseEdit() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleUpdateWeek = async () => {
+  const handlepublishtoggle = async () => {
+    setIsLoading(true);
+    try {
+      console.log(course.title);
+
+      const data = (
+        await updateCourse(course._id as string, {
+          published: !course.published,
+        })
+      ).data;
+      if (data) {
+        navigate(`/course/${course.slug}/edit?week=${week?.weekNumber}`);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateWeek = async (weekArg: ICourse["weeks"][0]) => {
     setIsLoading(true);
     try {
       console.log(course.title);
       if (week) {
-        const data: ICourse["weeks"][0] = (await updateWeek(week._id, week))
-          .data;
+        const data: ICourse["weeks"][0] = (
+          await updateWeek(weekArg._id, weekArg)
+        ).data;
         if (data) {
-          navigate(`/course/${course.slug}/edit?week=${week.weekNumber}`);
+          navigate(`/course/${course.slug}/edit?week=${weekArg.weekNumber}`);
         }
       }
     } catch (error) {
@@ -138,14 +163,23 @@ export default function CourseEdit() {
       <HeaderComp />
       <Overloader isLoading={isLoading} />
       <section className="bg-blue-200 text-black w-full h-[90%] fixed pb-0">
-        <div className="bg-[#0000ff] flex items-center text-white px-10 py-4">
-          <span className="cursor-pointer">
-            <IoIosArrowBack size={30} />
-          </span>
-          <p className="text-xl font-semibold">
-            {" "}
-            <Link to={"/dashboard/courses"}>Course</Link> / {course.title}
-          </p>
+        <div className="bg-[#0000ff] justify-between flex items-center text-white px-10 py-4">
+          <div className="flex items-center">
+            <span className="cursor-pointer">
+              <IoIosArrowBack size={30} />
+            </span>
+            <p className="text-xl font-semibold">
+              {" "}
+              <Link to={"/dashboard/courses"}>Course</Link> / {course.title}
+            </p>
+          </div>
+          <label className="flex items-center gap-3">
+            <span>{course.published ? "Published" : "Publish"}</span>
+            <Toggle
+              toggle={handlepublishtoggle}
+              isToggled={course?.published}
+            />
+          </label>
         </div>
         <div className="h-[90%] flex ">
           <div className="left flex h-full flex-col gap-4 pl-8 pr-5 py-4 bg-[#F3F4F5] w-1/4">
@@ -225,14 +259,6 @@ export default function CourseEdit() {
               >
                 Assessment
               </button>
-              <div className="flex w-fit self-end justify-self-end">
-                <button
-                  onClick={handleUpdateWeek}
-                  className="bg-blue-700 text-white px-4 py-1 rounded-md"
-                >
-                  Save
-                </button>
-              </div>
             </div>
             <div className="mt-4 flex flex-col gap-3">
               {activeTab === "materials" ? (
@@ -241,7 +267,7 @@ export default function CourseEdit() {
                     <CourseInput
                       submit={handleUpdateWeek}
                       week={week}
-                      setWeek={setWeek as typeof week}
+                      setWeek={setWeek}
                     />
                   )}
                 </>

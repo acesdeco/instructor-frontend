@@ -5,6 +5,7 @@ export interface ICourse {
   title: string;
   code: string;
   description: string;
+  published: boolean;
   instructor: {
     id: string;
     name: string;
@@ -18,8 +19,8 @@ export interface ICourse {
   };
   weeks: {
     [key: string]: {
-      weekNumber:number;
-      _id: string
+      weekNumber: number;
+      _id: string;
       video: string;
       assessments: string;
       notes: string;
@@ -39,7 +40,7 @@ export const getCourse = async (id: string): Promise<ICourse> => {
   }
 };
 
-export const addWeek = async (id: string, data:any): Promise<any> => {
+export const addWeek = async (id: string, data: any): Promise<any> => {
   try {
     const response = await api.post(`/course/${id}/week`, data);
     return response.data.data as ICourse;
@@ -49,7 +50,7 @@ export const addWeek = async (id: string, data:any): Promise<any> => {
   }
 };
 
-export const getWeeksByCoursesId = async (id:String): Promise<ApiResponse> => {
+export const getWeeksByCoursesId = async (id: String): Promise<ApiResponse> => {
   try {
     const response = await api.get(`/course/weeks/${id}`);
     return {
@@ -89,7 +90,6 @@ export const getWeeksByCoursesId = async (id:String): Promise<ApiResponse> => {
     }
   }
 };
-
 
 export const getCourseBySlug = async (slug: string): Promise<ICourse> => {
   try {
@@ -151,10 +151,7 @@ export const createCourse = async (
   }
 };
 
-export const updateWeek = async (
-  id: string,
-  weekData: any
-): Promise<any> => {
+export const updateWeek = async (id: string, weekData: any): Promise<any> => {
   try {
     const response = await api.put(`/course/week/${id}`, weekData);
     return response.data;
@@ -194,7 +191,7 @@ export const updateWeek = async (
 
 export const updateCourse = async (
   id: string,
-  courseData: ICourse
+  courseData: any
 ): Promise<ApiResponse> => {
   try {
     const response = await api.put(`/course/${id}`, courseData);
