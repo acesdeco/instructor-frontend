@@ -5,7 +5,7 @@ import {
   //   IAssessment,
 } from "~/axios/Assessments";
 import { useEffect, useState } from "react";
-import ActiveAs from "./LargeAssessmentComponent";
+import ActiveAs from "./SubmissionsList";
 interface Question {
   id: number;
   question_text: string;
@@ -26,7 +26,7 @@ interface AssessmentComponentProps {
   };
 }
 
-export const AssessmentComponent = ({
+export const SubmissionsFlow = ({
   weekId,
   courseId,
   user,
@@ -40,66 +40,65 @@ AssessmentComponentProps) => {
     setAssessmentId(id);
     setSingleAssessmentView(true);
   };
-  const goBack = ()=> {
+  const goBack = () => {
     setSingleAssessmentView(false);
     setAssessmentId("");
-  }
+  };
 
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
         const response = await getAssessmentByWeek(weekId);
-        if(response.success){
-            const assessmentsData = response.data as [];
-            setAssessments([...assessmentsData]);
-            setLoadingAssessments(false);
+        if (response.success) {
+          const assessmentsData = response.data as [];
+          setAssessments([...assessmentsData]);
+          setLoadingAssessments(false);
         }
       } catch (error) {
         console.error("Error fetching assessments:", error);
       }
     };
-    if(weekId){
+    if (weekId) {
       fetchAssessments();
-    }else {
+    } else {
       setLoadingAssessments(false);
     }
   }, [weekId, courseId, singleAssessmentView]);
-  if(loadingAssesments){
-    return(
-    <div className="flex justify-center items-center h-full">
+  if (loadingAssesments) {
+    return (
+      <div className="flex justify-center items-center h-full">
         <div className="loader"></div>
-    </div>
+      </div>
     );
   }
   return (
     <>
       {singleAssessmentView ? (
-        <ActiveAs goBack={goBack} courseId={courseId} weekId={weekId} user={user} assessmentId={assessmentId} />
+        <ActiveAs
+          goBack={goBack}
+          courseId={courseId}
+          weekId={weekId}
+          user={user}
+          assessmentId={assessmentId}
+        />
       ) : (
         <section>
           {assessments.length > 0 ? (
             <ul>
               {assessments.map((assessment: IAssessment) => (
                 <li key={assessment._id} className="py-2">
-                  <button onClick={() => showAssessment(assessment._id)} className="bg-blue-300 p-2 w-full text-left rounded-md">
-                    <h3>{assessment.title}</h3>
-                    <p className="text-sm text-gray-600">
-                      {assessment.description}
-                    </p>
+                  <button
+                    onClick={() => showAssessment(assessment._id)}
+                    className="bg-blue-300 p-2 py-4 w-full text-left rounded-md"
+                  >
+                    <h3>Submissions for {assessment.title}</h3>
                   </button>
                 </li>
               ))}
-              
-                <button className="bg-blue-600 mt-2 p-2 w-fit text-white rounded-md" onClick={() => showAssessment("")}>
-                    Create New Assessment
-                </button>
             </ul>
           ) : (
             <>
-              <p>You have no assessments for this week</p>
-              <button className="bg-blue-600 p-2 w-full my-4 text-white rounded-md" onClick={() => showAssessment("")}>
-                Create Assessment
-              </button>
+              <p>You have no submissions for this week</p>
             </>
           )}
         </section>

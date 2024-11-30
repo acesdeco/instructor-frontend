@@ -4,7 +4,7 @@ import { IoIosArrowDown, IoIosClose } from "react-icons/io"
 import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5"
 import useHeaderActive from "~/hooks/HeaderActive"
 export const HeaderComp = () => {
-    const {menuOpen: isMenuOpen, openMenu} = useHeaderActive();
+    const {menuOpen: isMenuOpen, toggleMenu} = useHeaderActive();
     return (
         <header className="w-[100%] bg-white h-fit md:h-[10%] flex flex-row items-center py-5 justify-between bg-transparent px-10">
         <div id="left">
@@ -39,7 +39,7 @@ export const HeaderComp = () => {
               </button>
             </div>
             <button
-              onClick={() => openMenu()}
+              onClick={() => toggleMenu()}
               className="cursor-pointer md:hidden"
             >
               {isMenuOpen ? (

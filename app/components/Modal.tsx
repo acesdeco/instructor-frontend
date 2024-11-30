@@ -1,6 +1,6 @@
+import { useNavigate } from "@remix-run/react";
 export default function Modal({
   isModalOpen,
-  setModalOpen,
   header,
   children,
   onAccept,
@@ -8,13 +8,14 @@ export default function Modal({
   isForm,
 }: {
   isModalOpen: boolean;
-  setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   header: string;
   children: React.ReactNode;
   onAccept?: () => void;
   acceptText?: string;
   isForm?: boolean;
 }) {
+  const navigate = useNavigate();
+
   return (
     <div
       className={`fixed backdrop-blur-md bg-white/50  h-screen w-screen inset-0 z-30 flex items-center justify-center  ${
@@ -37,8 +38,7 @@ export default function Modal({
           )}
 
           <button
-            onClick={
-              setModalOpen ? () => setModalOpen(false) : () => console.log(true)
+            onClick={() => navigate(-1)
             }
             className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded"
           >

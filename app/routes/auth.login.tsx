@@ -27,7 +27,6 @@ type ActionData = {
   };
 };
 export const action: ActionFunction = async ({ request }) => {
-  console.log("in");
   const formData = await request.formData();
   const password = formData.get("password") as string;
   const email = formData.get("email") as string;
@@ -45,7 +44,6 @@ export const action: ActionFunction = async ({ request }) => {
     // add other required fields if any
   };
   const response = await loginUser({ ...user, role: "instructor" });
-  console.log("response:", response);
   if (response.success && "data" in response) {
     const cookieHeader = request.headers.get("Cookie");
     const cookie = (await userState.parse(cookieHeader)) || {};
@@ -103,7 +101,7 @@ export default function Index() {
         <section className="h-full flex flex-row items-center justify-center">
           <section className="w-full md:w-1/2">
             <h2 className="text-2xl font-bold mb-6">Login</h2>
-            <Form key={"login_form"} id="login-form" method="post">
+            <Form key={"login_form"} id="login-form" method="post" onSubmit={() => setIsSubmitting(true)}>
               <div className="mb-4">
                 <Input
                   type="email"
@@ -132,7 +130,7 @@ export default function Index() {
                 type="submit"
                 formMethod="post"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={() => setIsSubmitting(true)}
+                // onClick={() => setIsSubmitting(true)}
               >
                 {isSubmitting ? (
                   <svg
@@ -186,6 +184,8 @@ export default function Index() {
 export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userState.parse(cookieHeader)) || {};
-  console.log("cookie:", cookie);
+  if (cookie.user) {
+    return redirect("/dashboard/courses");
+  }
   return null;
 };

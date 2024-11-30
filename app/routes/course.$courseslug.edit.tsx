@@ -31,6 +31,7 @@ import { AssessmentComponent } from "~/components/Assessments/AssessmentComponen
 import { HeaderComp } from "~/components/Header";
 import { user as userState } from "~/serverstate.server";
 import Toggle from "~/components/ToggleComponent";
+import {SubmissionsFlow} from "../components/Submissions/SetupSubmissions";
 // type LoaderData = {
 //   user: {
 //     fullName: string;
@@ -51,7 +52,6 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userState.parse(cookieHeader)) || {};
-  console.log(cookie);
   const slug = params.courseslug;
 
   const course: ICourse = await getCourseBySlug(slug as string);
@@ -69,7 +69,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return json({ course: course, user: cookie.user });
   }
 
-  console.log(weeks, course);
   return json({ course, weeks, user: cookie.user });
 };
 
@@ -88,9 +87,7 @@ export default function CourseEdit() {
   const [searchParams] = useSearchParams();
   const weekParams = searchParams.get("week");
   const navigate = useNavigate();
-  console.log(weekParams);
   useEffect(() => {
-    console.log(weekParams);
     if (weekParams) {
       setWeek(weeks[parseInt(weekParams) - 1]);
     } else {
@@ -236,8 +233,6 @@ export default function CourseEdit() {
                     ))
                   )}
                 </div>
-                <h3 className="text-lg font-semibold">Submissions</h3>
-                <h3 className="text-lg font-semibold">Assessment</h3>
               </div>
             )}
           </div>
@@ -259,9 +254,17 @@ export default function CourseEdit() {
               >
                 Assessment
               </button>
+              <button
+                className={`cursor-pointer ${
+                  activeTab === "submissions" ? "text-[#0080FF]" : ""
+                }`}
+                onClick={() => setActiveTab("submissions")}
+              >
+                Submissions
+              </button>
             </div>
             <div className="mt-4 flex flex-col gap-3">
-              {activeTab === "materials" ? (
+              {activeTab === "materials" && (
                 <>
                   {week && (
                     <CourseInput
@@ -271,7 +274,8 @@ export default function CourseEdit() {
                     />
                   )}
                 </>
-              ) : (
+              )}
+              { activeTab === "assessment" && (
                 <AssessmentComponent
                   user={{
                     name: user.fullName as string,
@@ -281,6 +285,20 @@ export default function CourseEdit() {
                   weekId={week!._id as string}
                 />
               )}
+              {
+                activeTab === "submissions" && (
+                  <div>
+                    <SubmissionsFlow
+                  user={{
+                    name: user.fullName as string,
+                    id: user.user || user._id,
+                  }}
+                  courseId={course._id as string}
+                  weekId={week!._id as string}
+                  ></SubmissionsFlow>
+                  </div>
+                )
+              }
             </div>
           </div>
         </div>
