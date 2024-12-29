@@ -31,7 +31,7 @@ import { AssessmentComponent } from "~/components/Assessments/AssessmentComponen
 import { HeaderComp } from "~/components/Header";
 import { user as userState } from "~/serverstate.server";
 import Toggle from "~/components/ToggleComponent";
-import {SubmissionsFlow} from "../components/Submissions/SetupSubmissions";
+import { SubmissionsFlow } from "../components/Submissions/SetupSubmissions";
 // type LoaderData = {
 //   user: {
 //     fullName: string;
@@ -167,7 +167,7 @@ export default function CourseEdit() {
             </span>
             <p className="text-xl font-semibold">
               {" "}
-              <Link to={"/dashboard/courses"}>Course</Link> / {course.title}
+              <Link to={"/dashboard/courses"}> Course</Link> / {course.title}
             </p>
           </div>
           <label className="flex items-center gap-3">
@@ -237,10 +237,12 @@ export default function CourseEdit() {
             )}
           </div>
           <div className="right px-6 pt-6 gap-5 w-full h-full bg-white pb-10 overflow-auto  flex flex-col text-black">
-            <div className="flex text-lg font-medium gap-3">
+            <div className="flex text-lg font-medium gap-3 border-b">
               <button
                 className={`cursor-pointer ${
-                  activeTab === "materials" ? "text-[#0080FF]" : ""
+                  activeTab === "materials"
+                    ? "text-[#0080FF] border-b-4 px-4 border-[#0080FF]"
+                    : "px-4  border-b-4 border-transparent"
                 }`}
                 onClick={() => setActiveTab("materials")}
               >
@@ -248,7 +250,9 @@ export default function CourseEdit() {
               </button>
               <button
                 className={`cursor-pointer ${
-                  activeTab === "assessment" ? "text-[#0080FF]" : ""
+                  activeTab === "assessment"
+                    ? "text-[#0080FF] border-b-4 px-4 border-[#0080FF]"
+                    : "px-4  border-b-4 border-transparent"
                 }`}
                 onClick={() => setActiveTab("assessment")}
               >
@@ -256,7 +260,9 @@ export default function CourseEdit() {
               </button>
               <button
                 className={`cursor-pointer ${
-                  activeTab === "submissions" ? "text-[#0080FF]" : ""
+                  activeTab === "submissions"
+                    ? "text-[#0080FF] border-b-4 px-4 border-[#0080FF]"
+                    : "px-4 border-b-4 border-transparent"
                 }`}
                 onClick={() => setActiveTab("submissions")}
               >
@@ -275,7 +281,7 @@ export default function CourseEdit() {
                   )}
                 </>
               )}
-              { activeTab === "assessment" && (
+              {activeTab === "assessment" && (
                 <AssessmentComponent
                   user={{
                     name: user.fullName as string,
@@ -285,20 +291,18 @@ export default function CourseEdit() {
                   weekId={week!._id as string}
                 />
               )}
-              {
-                activeTab === "submissions" && (
-                  <div>
-                    <SubmissionsFlow
-                  user={{
-                    name: user.fullName as string,
-                    id: user.user || user._id,
-                  }}
-                  courseId={course._id as string}
-                  weekId={week!._id as string}
+              {activeTab === "submissions" && (
+                <div>
+                  <SubmissionsFlow
+                    user={{
+                      name: user.fullName as string,
+                      id: user.user || user._id,
+                    }}
+                    courseId={course._id as string}
+                    weekId={week!._id as string}
                   ></SubmissionsFlow>
-                  </div>
-                )
-              }
+                </div>
+              )}
             </div>
           </div>
         </div>

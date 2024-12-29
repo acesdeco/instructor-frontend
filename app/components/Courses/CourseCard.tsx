@@ -6,7 +6,7 @@ interface ICourseCard {
 }
 export const CourseCard = ({ course }: ICourseCard) => {
   return (
-    <div className="min-w-32 rounded-md cursor-pointer w-full shadow-lg p-4 shadow-gray-300 text-gray-900">
+    <div className="min-w-32 rounded-md cursor w-full shadow-lg p-4 shadow-gray-300 text-gray-900">
       <figure className="h-52 ">
         <img
           className="w-full h-full object-cover rounded-md"

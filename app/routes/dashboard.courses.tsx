@@ -36,7 +36,7 @@ export default function Enrolled() {
             <p className="text-gray-900 text-xl font-medium">
               Check Internet Connection
             </p>
-            <span className="text-gray-800 mb-2">The network failee</span>
+            <span className="text-gray-800 mb-2">The network failed</span>
             <Link to={`/dashboard/courses`} className="w-fit">
               <Button>Reload</Button>
             </Link>
